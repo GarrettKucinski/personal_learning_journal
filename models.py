@@ -7,13 +7,15 @@ db = SqliteDatabase('journal.db')
 
 class Entry(Model):
     title = CharField(max_length=150)
-    description = TextField()
-    date = DateTimeField(default=datetime.datetime.now)
+    content = TextField()
+    date = CharField(max_length=150)
     time_spent = CharField(max_length=150)
     resources = TextField()
+    timestamp = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
         database = db
+        order_by = ('-title',)
 
 
 def initialize():

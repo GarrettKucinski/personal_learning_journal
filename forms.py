@@ -1,11 +1,11 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import (StringField, DateTimeField,
                      TextAreaField, FieldList, validators)
 
 
-class EntryForm(Form):
+class EntryForm(FlaskForm):
     title = StringField(u'Title', [validators.required()])
-    date = DateTimeField(u'Date', [validators.required()])
+    date = StringField(u'Date', [validators.required()])
     time_spent = StringField(u'Time Spent', [validators.required()])
     content = TextAreaField(u'What I Learned', [validators.required()])
     resources = TextAreaField(u'Resources to Remember', [

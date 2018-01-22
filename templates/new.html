@@ -5,7 +5,7 @@
 {% block content %}
   <div class="new-entry">
       <h2>New Entry</h2>
-      <form>
+      <form action="" method="POST">
           {{ form.hidden_tag() }}
           {% for field in form %}
             {{ render_field(field) }}
