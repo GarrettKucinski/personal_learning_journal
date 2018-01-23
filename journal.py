@@ -71,7 +71,7 @@ def edit(slug):
 
 @app.route('/entries/delete/<slug>')
 def delete(slug):
-    models.Entry.get(models.Entry.slug == slug).delete_instance()
+    models.Entry.get(slug=slug).delete_instance()
     flash("Entry has been deleted successfully!", "success")
     return redirect(url_for('index'))
 

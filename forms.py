@@ -1,21 +1,30 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, DateField,
                      TextAreaField, FieldList)
-from wtforms.validators import DataRequired, Regexp
+from wtforms.validators import DataRequired, Regexp, ValidationError
+
+import datetime
+
+
+def validate_date_format(form, field):
+    try:
+        datetime.datetime.strptime(field.data, "%Y-%m-%d")
+    except ValueError:
+        raise ValidationError(
+            "You must enter a valid date in the format yyyy-mm-dd.")
 
 
 class EntryForm(FlaskForm):
-    title = StringField(u'Title', validators=[DataRequired()])
+    title = StringField(u"Title", validators=[DataRequired()])
     date = StringField(
-        u'Date',
+        u"Date",
         validators=[
             DataRequired(),
-            Regexp(r'^\d{4}-\d{2}-\d{2}$',
-                   message="You must enter a valid date ex. YYYY-MM-DD")
+            validate_date_format
         ])
-    time_spent = StringField(u'Time Spent', validators=[DataRequired()])
-    content = TextAreaField(u'What I Learned', validators=[DataRequired()])
+    time_spent = StringField(u"Time Spent", validators=[DataRequired()])
+    content = TextAreaField(u"What I've Learned", validators=[DataRequired()])
     resources = TextAreaField(
-        u'Resources to Remember',
+        u"Resources to Remember",
         validators=[DataRequired()]
     )
