@@ -4,8 +4,8 @@
   <div class="entry-list">
     {% for entry in entries %}
       <article>
-          <h2><a href="{{ url_for('detail', entry_id=entry.id) }}">{{ entry.title }}</a></h2>
-          <time datetime="{{ entry.date }}">{{ entry.date }}</time>
+        <h2><a href="{{ url_for('detail', slug=entry.slug) }}">{{ entry.title }}</a></h2>
+        <time datetime="{{ entry.date }}">{{ entry.formatted_date }} {{ entry.timestamp.strftime('%-I:%M%p') }}</time>
       </article>
     {% endfor %}
   </div>

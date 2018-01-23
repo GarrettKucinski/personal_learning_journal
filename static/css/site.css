@@ -171,12 +171,12 @@ ul li a {
 .entry p {
 	margin-bottom: 40px;
 }
-.edit {
+.edit, .delete {
 	padding-bottom: 80px;
 	text-align: center;
 	margin: 0 auto;
 }
-.edit a {
+.edit a, .delete a {
 	font-weight: 400;
 	text-transform: uppercase;
 	font-size: 18px;
@@ -226,6 +226,24 @@ input[type=submit] {
 }
 
 
+/* ==========================================================================
+   Custom Styles
+   ========================================================================== */
+
+.notification {
+  padding: 10px;
+  color: white;
+  text-align: center;
+}
+
+.notification.success {
+  background: seagreen;
+}
+
+.notification.error {
+  color: firebrick;
+  text-align: left;
+}
 
 
 

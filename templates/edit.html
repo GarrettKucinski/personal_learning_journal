@@ -5,13 +5,6 @@
 {% block content %}
   <div class="edit-entry">
       <h2>Edit Entry</h2>
-      <form>
-          {{ form.hidden_tag() }}
-          {% for field in form %}
-            {{ render_field(field) }}
-          {% endfor %}
-          <input type="submit" value="Publish Entry" class="button">
-          <a href="#" class="button button-secondary">Cancel</a>
-      </form>
+      {% include 'includes/entry_form.html' %}
   </div>
 {% endblock %}
