@@ -29,22 +29,29 @@ def index():
 
 @app.route('/entries/<slug>')
 def detail(slug):
-    entry = models.Entry.select().where(models.Entry.slug == slug)
-    entry[0].formatted_date = datetime.datetime.strptime(
-        entry[0].date, '%Y-%m-%d').strftime('%B %d, %Y')
-    if entry.count() == 0:
+    entry = models.Entry.get(models.Entry.slug == slug)
+    entry.formatted_date = datetime.datetime.strptime(
+        entry.date, '%Y-%m-%d').strftime('%B %d, %Y')
+
+    if not entry:
         abort(404)
 
-    return render_template('detail.html', entry=entry[0])
+    return render_template('detail.html', entry=entry)
 
 
 @app.route('/entries/new', methods=("GET", "POST"))
 def new():
     form = forms.EntryForm()
     if form.validate_on_submit():
+        slug = slugify(form.title.data.lower())
+        entries = models.Entry.select().where(models.Entry.slug.contains(slug))
+
+        if entries.count() >= 1:
+            slug = "{}-{}".format(slug, (entries.count() + 1))
+
         models.Entry.create(
             title=form.title.data,
-            slug=slugify(form.title.data.lower()),
+            slug=slug,
             date=form.date.data,
             time_spent=form.time_spent.data,
             content=form.content.data,
