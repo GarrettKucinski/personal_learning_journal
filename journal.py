@@ -5,6 +5,7 @@ import datetime
 
 import models
 import forms
+import re
 
 DEBUG = True
 PORT = 8000
@@ -23,7 +24,7 @@ def index(tag=''):
     entries = models.Entry.select()
 
     if tag:
-        entries = models.Entry.select().where(models.Entry.tags.contains(tag))
+        entries = entries.where(models.Entry.tags.regexp(r'\b' + tag + r'\b'))
 
     for entry in entries:
         entry.formatted_date = datetime.datetime.strptime(
@@ -92,5 +93,4 @@ def delete(slug):
 
 if __name__ == "__main__":
     models.initialize()
-
-app.run(debug=DEBUG, port=PORT, host=HOST)
+    app.run(debug=DEBUG, port=PORT, host=HOST)

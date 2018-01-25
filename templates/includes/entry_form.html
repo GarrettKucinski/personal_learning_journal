@@ -1,6 +1,6 @@
 <form action="" method="POST">
     {{ form.hidden_tag() }}
-    {% for field in form %}
+    {% for field in form if field.type not in ["HiddenField", "CSRFTokenField"] %}
       {{ render_field(field) }}
     {% endfor %}
     <input type="submit" value="Publish Entry" class="button">
