@@ -32,3 +32,4 @@ class EntryForm(FlaskForm):
                    },
         validators=[DataRequired()]
     )
+    tags = TextAreaField(u"Tags")

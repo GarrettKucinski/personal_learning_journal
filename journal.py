@@ -18,13 +18,18 @@ app.secret_key = "It's a secret to everybody."
 
 @app.route('/')
 @app.route('/entries')
-def index():
+@app.route('/archive/<tag>')
+def index(tag=''):
     entries = models.Entry.select()
+
+    if tag:
+        entries = models.Entry.select().where(models.Entry.tags.contains(tag))
+
     for entry in entries:
         entry.formatted_date = datetime.datetime.strptime(
             entry.date, "%Y-%m-%d").strftime("%B %d, %Y")
 
-    return render_template('index.html', entries=entries)
+    return render_template('index.html', entries=entries, tag=tag)
 
 
 @app.route('/entries/<slug>')
@@ -56,7 +61,8 @@ def new():
             date=form.date.data,
             time_spent=form.time_spent.data,
             content=form.content.data,
-            resources=form.resources.data
+            resources=form.resources.data,
+            tags=form.tags.data
         )
         flash("Entry created successfully!", "success")
         return redirect(url_for('index'))

@@ -253,6 +253,32 @@ textarea::placeholder {
   font-size: 1rem
 }
 
+.tags {
+  margin: 10px 0;
+}
+
+.tag {
+  background: #efefef;
+  padding: 5px 15px;
+  border-radius: 50px;
+  width: 50px;
+  text-align: center;
+  margin: auto;
+}
+
+.tag a {
+  color: #333;
+  text-decoration: none;
+}
+
+.tag:hover {
+  background: #678f89;
+}
+
+.tag:hover a {
+  color: white;
+}
+
 
 
 

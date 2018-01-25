@@ -12,6 +12,7 @@ class Entry(Model):
     date = DateField(formats="%Y-%m-%d")
     time_spent = CharField(max_length=150)
     resources = TextField()
+    tags = TextField()
     timestamp = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
