@@ -26,5 +26,9 @@ class EntryForm(FlaskForm):
     content = TextAreaField(u"What I've Learned", validators=[DataRequired()])
     resources = TextAreaField(
         u"Resources to Remember",
+        render_kw={"placeholder": "Enter comma seperated url, name pairs."
+                   "Separate additional pairs with a pipe character."
+                   "(ex. http://www.github.com, GitHub|, Resource with no url)"
+                   },
         validators=[DataRequired()]
     )

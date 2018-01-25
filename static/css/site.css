@@ -245,6 +245,14 @@ input[type=submit] {
   text-align: left;
 }
 
+label[for="csrf_token"] {
+  display: none;
+}
+
+textarea::placeholder {
+  font-size: 1rem
+}
+
 
 
 

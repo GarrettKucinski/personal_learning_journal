@@ -32,6 +32,7 @@ def detail(slug):
     entry = models.Entry.get(models.Entry.slug == slug)
     entry.formatted_date = datetime.datetime.strptime(
         entry.date, '%Y-%m-%d').strftime('%B %d, %Y')
+    entry.resource_items = filter(None, entry.resources.split('|'))
 
     if not entry:
         abort(404)
