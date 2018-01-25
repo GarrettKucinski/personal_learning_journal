@@ -2,7 +2,6 @@
 
 {% block content %}
   <div class="entry-list">
-    {{ entries.count() }}
     {% for entry in entries %}
       <article>
         <h2><a href="{{ url_for('detail', slug=entry.slug) }}">{{ entry.title }}</a></h2>

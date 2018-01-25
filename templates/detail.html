@@ -26,6 +26,14 @@
                   {% endfor %}
               </ul>
           </div>
+          <div class="entry">
+              <h3>Tags:</h3>
+              <ul>
+                  {% for tag in entry.tags.split(',') %}
+                      <li><a href="{{ url_for('index', tag=tag.strip()) }}">{{ tag }}</a></li>
+                  {% endfor %}
+              </ul>
+          </div>
       </article>
   </div>
   <div class="edit">
