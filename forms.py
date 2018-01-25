@@ -18,6 +18,7 @@ class EntryForm(FlaskForm):
     title = StringField(u"Title", validators=[DataRequired()])
     date = StringField(
         u"Date",
+        render_kw={"placeholder": "must be in the format yyyy-mm-dd."},
         validators=[
             DataRequired(),
             validate_date_format
@@ -26,10 +27,15 @@ class EntryForm(FlaskForm):
     content = TextAreaField(u"What I've Learned", validators=[DataRequired()])
     resources = TextAreaField(
         u"Resources to Remember",
-        render_kw={"placeholder": "Enter comma seperated url, name pairs."
-                   "Separate additional pairs with a pipe character."
-                   "(ex. http://www.github.com, GitHub|, Resource with no url)"
+        render_kw={"placeholder": "(ex. http://www.github.com, GitHub|,"
+                   "Resource with no url)"
                    },
         validators=[DataRequired()]
     )
-    tags = TextAreaField(u"Tags")
+    tags = TextAreaField(u"Tags", render_kw={
+                         "placeholder": "ex. tag, tag, tag"})
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = StringField('Password', validators=[DataRequired()])

@@ -237,12 +237,29 @@ input[type=submit] {
 }
 
 .notification.success {
-  background: seagreen;
+  background: #dff0d8;
+  border: 1px solid #d0e9c6;
+  color: #3c763d;
 }
 
 .notification.error {
+  background: #f2dede;
+  border: 1px solid #ebcccc;
+  color: #a94442;
+}
+
+.notification.form.error {
   color: firebrick;
   text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  padding-bottom: 20px;
+}
+
+header .button.authenticate {
+  margin: 33px 20px 0 0;
+  display: inline-block;
 }
 
 textarea::placeholder {
@@ -253,8 +270,10 @@ textarea::placeholder {
   margin: 20px 0;
 }
 
-.tag {
+.tag a {
+  color: #333;
   background: #efefef;
+  text-decoration: none;
   padding: 5px 15px;
   border-radius: 50px;
   width: 50px;
@@ -262,16 +281,8 @@ textarea::placeholder {
   margin: auto;
 }
 
-.tag a {
-  color: #333;
-  text-decoration: none;
-}
-
-.tag:hover {
+.tag a:hover {
   background: #678f89;
-}
-
-.tag:hover a {
   color: white;
 }
 

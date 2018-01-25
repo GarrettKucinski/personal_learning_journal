@@ -1,5 +1,8 @@
 from flask import (Flask, g, render_template, redirect, flash, url_for, abort)
 from slugify import slugify, slugify_unicode
+from flask_login import (LoginManager, login_user,
+                         logout_user, login_required, current_user)
+from flask_bcrypt import check_password_hash
 
 import datetime
 
@@ -13,8 +16,36 @@ HOST = "0.0.0.0"
 
 app = Flask(__name__)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
 # Used by Flask to encrypt session cookie.
 app.secret_key = "It's a secret to everybody."
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        return models.User.get(models.User.id == user_id)
+    except models.DoesNotExist:
+        return None
+
+
+@app.before_request
+def before_request():
+    """Connect to database before each request"""
+
+    g.db = models.db
+    g.db.connect()
+    g.user = current_user
+
+
+@app.after_request
+def after_request(response):
+    """Close the database connection"""
+    g.db.close()
+    return response
 
 
 @app.route('/')
@@ -24,6 +55,7 @@ def index(tag=''):
     entries = models.Entry.select()
 
     if tag:
+        tag = ' '.join(tag.split('-'))
         entries = entries.where(models.Entry.tags.regexp(r'\b' + tag + r'\b'))
 
     for entry in entries:
@@ -47,6 +79,7 @@ def detail(slug):
 
 
 @app.route('/entries/new', methods=("GET", "POST"))
+@login_required
 def new():
     form = forms.EntryForm()
     if form.validate_on_submit():
@@ -72,6 +105,7 @@ def new():
 
 
 @app.route('/entries/edit/<slug>', methods=("GET", "POST"))
+@login_required
 def edit(slug):
     entry = models.Entry.get(slug=slug)
     form = forms.EntryForm(obj=entry)
@@ -85,12 +119,46 @@ def edit(slug):
 
 
 @app.route('/entries/delete/<slug>')
+@login_required
 def delete(slug):
     models.Entry.get(slug=slug).delete_instance()
     flash("Entry has been deleted successfully!", "success")
     return redirect(url_for('index'))
 
 
+@app.route('/login', methods=("GET", "POST"))
+def login():
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        try:
+            user = models.User.get(models.User.username == form.username.data)
+        except models.DoesNotExist:
+            flash("That user doesn't exist", "error")
+        else:
+            if check_password_hash(user.password, form.password.data):
+                login_user(user)
+                flash("You've been logged in", "success")
+                return redirect(url_for('index'))
+            else:
+                flash("You're username or password is incorrect", "error")
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash("You've been logged out!")
+
+    return redirect(url_for('index'))
+
+
 if __name__ == "__main__":
     models.initialize()
+
+    try:
+        models.User.create_user(username="admin", password="password")
+    except ValueError:
+        pass
+
     app.run(debug=DEBUG, port=PORT, host=HOST)

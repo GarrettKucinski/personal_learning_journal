@@ -9,7 +9,7 @@
           <time datetime="{{ entry.date }}">{{ entry.formatted_date }} {{ entry.timestamp.strftime('%-I:%M%p') }}</time>
           <div class="tags">
             {% for tag in entry.tags.split(',') %}
-              <span class="tag"><a href="{{ url_for('index', tag=tag.strip()) }}">{{ tag }}</a></span>
+              <span class="tag"><a href="{{ url_for('index', tag='-'.join(tag.strip().split(' '))) }}">{{ tag }}</a></span>
             {% endfor %}
           </div>
         </article>
