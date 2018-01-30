@@ -67,12 +67,12 @@ def index(tag=''):
 
 @app.route('/entries/<slug>')
 def detail(slug):
-    entry = models.Entry.get(models.Entry.slug == slug)
-    entry.formatted_date = datetime.datetime.strptime(
-        entry.date, '%Y-%m-%d').strftime('%B %d, %Y')
-    entry.resource_items = filter(None, entry.resources.split('|'))
-
-    if not entry:
+    try:
+        entry = models.Entry.get(models.Entry.slug == slug)
+        entry.formatted_date = datetime.datetime.strptime(
+            entry.date, '%Y-%m-%d').strftime('%B %d, %Y')
+        entry.resource_items = filter(None, entry.resources.split('|'))
+    except models.DoesNotExist:
         abort(404)
 
     return render_template('detail.html', entry=entry)
@@ -107,7 +107,11 @@ def new():
 @app.route('/entries/edit/<slug>', methods=("GET", "POST"))
 @login_required
 def edit(slug):
-    entry = models.Entry.get(slug=slug)
+    try:
+        entry = models.Entry.get(slug=slug)
+    except models.DoesNotExist:
+        abort(404)
+
     form = forms.EntryForm(obj=entry)
     if form.validate_on_submit():
         form.populate_obj(entry)
@@ -121,7 +125,11 @@ def edit(slug):
 @app.route('/entries/delete/<slug>')
 @login_required
 def delete(slug):
-    models.Entry.get(slug=slug).delete_instance()
+    try:
+        models.Entry.get(slug=slug).delete_instance()
+    except models.DoesNotExist:
+        abort(404)
+
     flash("Entry has been deleted successfully!", "success")
     return redirect(url_for('index'))
 
@@ -152,6 +160,11 @@ def logout():
     flash("You've been logged out!", "success")
 
     return redirect(url_for('index'))
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
